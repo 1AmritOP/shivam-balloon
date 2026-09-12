@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   CalendarDays,
   Clock,
@@ -6,6 +9,92 @@ import {
 } from "lucide-react";
 
 export default function InquiryPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    eventType: "",
+    date: "",
+    time: "",
+    location: "",
+    requirements: "",
+  });
+
+  const [error, setError] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { id, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+
+    setError("");
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const {
+      name,
+      phone,
+      email,
+      eventType,
+      date,
+      time,
+      location,
+      requirements,
+    } = formData;
+
+    if (
+      !name ||
+      !phone ||
+      !email ||
+      !eventType ||
+      !date ||
+      !time ||
+      !location ||
+      !requirements
+    ) {
+      setError("Please fill all the fields.");
+      return;
+    }
+
+    // Replace with actual Shivam Balloon Decoration WhatsApp number
+    const whatsappNumber = "919599694756";
+
+    const whatsappMessage = `
+Hello Shivam Balloon Decoration,
+
+I would like to make an inquiry for my upcoming event.
+
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+
+Event Type: ${eventType}
+Event Date: ${date}
+Event Time: ${time}
+Event Location: ${location}
+
+Decoration Requirements:
+${requirements}
+
+Thank you.
+    `.trim();
+
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
+
+    window.open(whatsappUrl, "_blank");
+  };
+
   return (
     <main className="bg-white">
 
@@ -142,7 +231,10 @@ export default function InquiryPage() {
                 Fill in your details and event requirements below.
               </p>
 
-              <form className="mt-7 space-y-5">
+              <form
+                onSubmit={handleSubmit}
+                className="mt-7 space-y-5"
+              >
 
                 {/* Name + Phone */}
                 <div className="grid gap-5 sm:grid-cols-2">
@@ -159,7 +251,9 @@ export default function InquiryPage() {
                       id="name"
                       type="text"
                       placeholder="Enter your name"
-                      className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                     />
                   </div>
 
@@ -175,7 +269,9 @@ export default function InquiryPage() {
                       id="phone"
                       type="tel"
                       placeholder="Enter phone number"
-                      className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                     />
                   </div>
 
@@ -194,7 +290,9 @@ export default function InquiryPage() {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
 
@@ -209,37 +307,39 @@ export default function InquiryPage() {
 
                   <select
                     id="eventType"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.eventType}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   >
                     <option value="">
                       Select event type
                     </option>
 
-                    <option value="birthday">
+                    <option value="Birthday Decoration">
                       Birthday Decoration
                     </option>
 
-                    <option value="anniversary">
+                    <option value="Anniversary Decoration">
                       Anniversary Decoration
                     </option>
 
-                    <option value="baby-shower">
+                    <option value="Baby Shower Decoration">
                       Baby Shower Decoration
                     </option>
 
-                    <option value="wedding">
+                    <option value="Wedding Decoration">
                       Wedding Decoration
                     </option>
 
-                    <option value="engagement">
+                    <option value="Engagement Decoration">
                       Engagement Decoration
                     </option>
 
-                    <option value="theme">
+                    <option value="Theme Decoration">
                       Theme Decoration
                     </option>
 
-                    <option value="other">
+                    <option value="Other">
                       Other
                     </option>
                   </select>
@@ -259,7 +359,9 @@ export default function InquiryPage() {
                     <input
                       id="date"
                       type="date"
-                      className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                      value={formData.date}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                     />
                   </div>
 
@@ -274,7 +376,9 @@ export default function InquiryPage() {
                     <input
                       id="time"
                       type="time"
-                      className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                      value={formData.time}
+                      onChange={handleChange}
+                      className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                     />
                   </div>
 
@@ -293,43 +397,10 @@ export default function InquiryPage() {
                     id="location"
                     type="text"
                     placeholder="Enter event location"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.location}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
-                </div>
-
-                {/* Budget */}
-                <div>
-                  <label
-                    htmlFor="budget"
-                    className="mb-2 block text-sm font-semibold text-gray-700"
-                  >
-                    Approximate Budget
-                  </label>
-
-                  <select
-                    id="budget"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
-                  >
-                    <option value="">
-                      Select your budget
-                    </option>
-
-                    <option value="under-3000">
-                      Under ₹3,000
-                    </option>
-
-                    <option value="3000-5000">
-                      ₹3,000 - ₹5,000
-                    </option>
-
-                    <option value="5000-10000">
-                      ₹5,000 - ₹10,000
-                    </option>
-
-                    <option value="10000-plus">
-                      ₹10,000+
-                    </option>
-                  </select>
                 </div>
 
                 {/* Requirements */}
@@ -345,9 +416,18 @@ export default function InquiryPage() {
                     id="requirements"
                     rows={5}
                     placeholder="Tell us about your decoration requirements..."
-                    className="w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.requirements}
+                    onChange={handleChange}
+                    className="w-full resize-none rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
+
+                {/* Error */}
+                {error && (
+                  <p className="text-sm font-medium text-red-500">
+                    {error}
+                  </p>
+                )}
 
                 {/* Submit */}
                 <button

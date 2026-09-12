@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import {
   MapPin,
   Phone,
@@ -7,6 +10,66 @@ import {
 } from "lucide-react";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    event: "",
+    message: "",
+  });
+
+  const [error, setError] = useState("");
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
+    const { id, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+
+    setError("");
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const { name, phone, email, event, message } = formData;
+
+    if (!name || !phone || !email || !event || !message) {
+      setError("Please fill all the fields.");
+      return;
+    }
+
+    const whatsappNumber = "919599694756";
+
+    const whatsappMessage = `
+Hello Shivam Balloon Decoration,
+
+I would like to make an inquiry.
+
+Name: ${name}
+Phone: ${phone}
+Email: ${email}
+Event Type: ${event}
+
+Message:
+${message}
+
+Thank you.
+    `.trim();
+
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
+      whatsappMessage
+    )}`;
+
+    window.open(whatsappUrl, "_blank");
+  };
+
   return (
     <main className="bg-white">
 
@@ -60,7 +123,7 @@ export default function ContactPage() {
 
                 {/* Phone */}
                 <a
-                  href="tel:+910000000000"
+                  href="tel:+919599694756"
                   className="flex items-center gap-4 rounded-xl border border-gray-100 p-5 shadow-sm transition hover:border-orange-200 hover:shadow-md"
                 >
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-orange-100 text-orange-500">
@@ -139,7 +202,9 @@ export default function ContactPage() {
 
               {/* WhatsApp */}
               <a
-                href="#"
+                href="https://wa.me/910000000000"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-7 inline-flex items-center gap-2 rounded-md bg-orange-500 px-6 py-3.5 text-sm font-bold text-white transition hover:bg-orange-600"
               >
                 <MessageCircle size={19} />
@@ -158,7 +223,10 @@ export default function ContactPage() {
                 upcoming event.
               </p>
 
-              <form className="mt-7 space-y-5">
+              <form
+                onSubmit={handleSubmit}
+                className="mt-7 space-y-5"
+              >
 
                 {/* Name */}
                 <div>
@@ -173,7 +241,9 @@ export default function ContactPage() {
                     id="name"
                     type="text"
                     placeholder="Enter your name"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border border-gray-200 bg-white text-black px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
 
@@ -190,7 +260,9 @@ export default function ContactPage() {
                     id="phone"
                     type="tel"
                     placeholder="Enter your phone number"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
 
@@ -207,7 +279,9 @@ export default function ContactPage() {
                     id="email"
                     type="email"
                     placeholder="Enter your email"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
 
@@ -222,27 +296,35 @@ export default function ContactPage() {
 
                   <select
                     id="event"
+                    value={formData.event}
+                    onChange={handleChange}
                     className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm text-gray-600 outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   >
                     <option value="">
                       Select event type
                     </option>
-                    <option value="birthday">
+
+                    <option value="Birthday Decoration">
                       Birthday Decoration
                     </option>
-                    <option value="anniversary">
+
+                    <option value="Anniversary Decoration">
                       Anniversary Decoration
                     </option>
-                    <option value="baby-shower">
+
+                    <option value="Baby Shower Decoration">
                       Baby Shower Decoration
                     </option>
-                    <option value="wedding">
+
+                    <option value="Wedding Decoration">
                       Wedding Decoration
                     </option>
-                    <option value="theme">
+
+                    <option value="Theme Decoration">
                       Theme Decoration
                     </option>
-                    <option value="party">
+
+                    <option value="Party Decoration">
                       Party Decoration
                     </option>
                   </select>
@@ -261,9 +343,18 @@ export default function ContactPage() {
                     id="message"
                     rows={5}
                     placeholder="Tell us about your event..."
-                    className="w-full resize-none rounded-lg border border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full resize-none rounded-lg border text-black border-gray-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
+
+                {/* Error */}
+                {error && (
+                  <p className="text-sm font-medium text-red-500">
+                    {error}
+                  </p>
+                )}
 
                 <button
                   type="submit"

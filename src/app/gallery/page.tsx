@@ -109,7 +109,7 @@ export default function GalleryPage() {
           </div>
 
           {/* Filter Buttons */}
-          <div className="mt-10 flex flex-wrap justify-center gap-3">
+          {/* <div className="mt-10 flex flex-wrap justify-center gap-3">
             {[
               "All",
               "Birthday",
@@ -130,7 +130,7 @@ export default function GalleryPage() {
                 {category}
               </button>
             ))}
-          </div>
+          </div> */}
 
           {/* Image Grid */}
           <div className="mt-12 grid grid-cols-2 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
